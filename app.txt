@@ -1,1 +1,4 @@
 Initial app setup
+Add login page
+Add login validation
+Fix login bug
