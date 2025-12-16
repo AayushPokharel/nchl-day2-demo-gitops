@@ -1,0 +1,19 @@
+appName: demo-python-app
+replicas: 3
+
+port: 80
+targetPort: 5000
+
+namespace: default
+
+image:
+  name: shahgnp/demo-python-app
+  tag: 1.0.5
+
+hostName: app.rke2.localdomain
+path: demo-python-app
+ingressClassName: ingress-external
+
+rollout:
+  enabled: true
+  strategy: blueGreen

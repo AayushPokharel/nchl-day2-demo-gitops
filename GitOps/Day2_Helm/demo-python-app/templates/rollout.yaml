@@ -1,0 +1,49 @@
+apiVersion: {{ .Values.rollout.enabled | ternary "argoproj.io/v1alpha1" "apps/v1" }} 
+kind: {{ .Values.rollout.enabled | ternary "Rollout" "Deployment" }}
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.rollout.enabled | ternary "rollout" "deployment" }} 
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: {{ .Values.appName }}-app
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+{{- if .Values.rollout.enabled }}
+  strategy:
+    {{- if eq .Values.rollout.strategy "canary" }}
+    canary:
+      maxUnavailable: 0  # Allow zero replicas to be unavailable during update
+      steps:
+        - setWeight: 25  # Deploy 25% of the traffic to the new version
+        - pause:
+            duration: 30s
+        - setWeight: 50
+        - pause:
+            duration: 30s
+        - setWeight: 75
+        - pause:
+            duration: 30s
+        - setWeight: 100
+        - pause:
+            duration: 30s
+    {{- else if eq .Values.rollout.strategy "blueGreen" }}
+    blueGreen:
+      activeService: {{ .Values.appName }}-active
+      previewService: {{ .Values.appName }}-preview
+      autoPromotionEnabled: true           # <-- enables auto promotion
+      autoPromotionSeconds: 10             # <-- optional delay before promotion
+      scaleDownDelaySeconds: 30
+    {{- else }}
+    type: "Recreate"  # Fallback strategy if strategy name is not recognized
+    {{- end }}
+{{- end }}

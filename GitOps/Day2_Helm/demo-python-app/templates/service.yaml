@@ -1,0 +1,32 @@
+{{- if and .Values.rollout.enabled (eq .Values.rollout.strategy "blueGreen") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-preview
+  labels:
+    app: {{ .Values.appName }}
+    type: preview
+spec:
+  selector:
+    app: {{ .Values.appName }}
+  ports:
+    - name: http
+      port: {{ .Values.port }}
+      targetPort: {{ .Values.targetPort }}
+{{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-active
+  labels:
+    app: {{ .Values.appName }}
+    type: active
+spec:
+  selector:
+    app: {{ .Values.appName }}
+  ports:
+    - name: http
+      port: {{ .Values.port }}
+      targetPort: {{ .Values.targetPort }}

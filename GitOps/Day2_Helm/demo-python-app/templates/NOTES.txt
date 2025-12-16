@@ -1,0 +1,1 @@
+There is nothing in this notes. The helm chart is just for demo purposes.
