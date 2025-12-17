@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: image-updater
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: image-updater
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  source:
+    chart: argocd-image-updater
+    repoURL: "https://argoproj.github.io/argo-helm"
+    targetRevision: 0.9.1
+    helm:
+      releaseName: image-updater
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

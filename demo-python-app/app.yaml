@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-python-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: AayushPokharel/demo-python-app:~1.0
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-startsm
+    argocd-image-updater.argoproj.io/git-branch: main
+spec:
+  destination:
+    namespace: demo-python-app
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: demo-python-app
+    repoURL: 'https://github.com/AayushPokharel/nchl-day2-demo-helm.git'
+    targetRevision: main
+  project: demo-python-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

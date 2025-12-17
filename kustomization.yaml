@@ -1,0 +1,5 @@
+resources:
+  - imageupdater/project.yaml
+  - imageupdater/app.yaml
+  - demo-python-app/app.yaml
+  - demo-python-app/project.yaml
