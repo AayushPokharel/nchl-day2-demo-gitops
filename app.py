@@ -16,7 +16,7 @@ def hello_geek():
     name = app.config['NAME']
     company = app.config['COMPANY']
 
-    return f'<h1>Hello from Flask & Docker. v1.0.2  - {name} {company}</h1>'
+    return f'<h1>Hello from Flask & Docker. v1.0.3  - {name} {company}</h1>'
 
 @app.route('/getData')
 def get_data():
