@@ -32,7 +32,7 @@ spec:
         ingressClassName: ingress-external
         rollout:
           enabled: true
-          strategy: canaru
+          strategy: blueGreen
 
   project: demo-python-app
   syncPolicy:
