@@ -17,6 +17,23 @@ spec:
     path: demo-python-app
     repoURL: 'https://github.com/AayushPokharel/nchl-day2-demo-helm.git'
     targetRevision: main
+    helm:
+      values: |
+        appName: demo-python-app
+        replicas: 3
+        port: 80
+        targetPort: 5000
+        namespace: demo-python-app
+        image:
+          name: AayushPokharel/demo-python-app
+          tag: 1.0.1
+        hostName: app.rke2.localdomain
+        path: demo-python-app
+        ingressClassName: ingress-external
+        rollout:
+          enabled: true
+          strategy: canaru
+
   project: demo-python-app
   syncPolicy:
     automated:
